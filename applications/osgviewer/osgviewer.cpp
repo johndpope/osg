@@ -159,6 +159,55 @@ int main(int argc, char** argv)
         return 1;
     }
 
+    /*add default shaders */
+    
+    //Load default VERTEX shader from file
+    osg::Shader* fShader = osgDB::readShaderFile(osg::Shader::VERTEX, "default.frag");
+    if(!fShader){
+        std::cout << arguments.getApplicationName() <<": No custom VERTEX shader loaded" << std::endl;
+    }else{
+        std::cout << arguments.getApplicationName() <<": Custom VERTEX shader loaded" << std::endl;
+    }
+    //Load default FRAGMENT shader from file
+    osg::Shader* vShader = osgDB::readShaderFile(osg::Shader::FRAGMENT, "default.vert");
+    if(!vShader){
+        std::cout << arguments.getApplicationName() <<": No custom FRAGMENT shader loaded" << std::endl;
+    }else{
+        std::cout << arguments.getApplicationName() <<": Custom FRAGMENT shader loaded" << std::endl;
+    }
+    
+    //Create a new program object
+    osg::ref_ptr<osg::Program> program = new osg::Program;
+
+    //Add VERTEX shader
+    addshader_status = program->addShader(vShader);
+    if(addshader_status == false){
+        std::cout << arguments.getApplicationName() <<": Failed to add VERTEX shader" << std::endl;
+    }else{
+        std::cout << arguments.getApplicationName() <<": Loaded VERTEX shader" << std::endl;
+    }
+
+    //Add FRAGMENT shader
+    addshader_status = program->addShader(fShader);
+    if(addshader_status == false){
+        std::cout << arguments.getApplicationName() <<": Failed to add FRAGMENT shader" << std::endl;
+    }else{
+        std::cout << arguments.getApplicationName() <<": Loaded FRAGMENT shader" << std::endl;
+    }
+
+    // node should be the reference to the return value of the osgDB::readRefNodeFile
+    loadedModel->getOrCreateStateSet()->setAttributeAndModes(program);  
+
+    // any option left unread are converted into errors to write out later.
+    arguments.reportRemainingOptionsAsUnrecognized();
+
+    // report any errors if they have occurred when parsing the program arguments.
+    if (arguments.errors())
+    {
+        arguments.writeErrorMessages(std::cout);
+        return 1;
+    }
+
     // any option left unread are converted into errors to write out later.
     arguments.reportRemainingOptionsAsUnrecognized();
 
