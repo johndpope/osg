@@ -36,6 +36,7 @@
 
 int main(int argc, char** argv)
 {
+    bool addshader_status;
     // use an ArgumentParser object to manage the program arguments.
     osg::ArgumentParser arguments(&argc,argv);
 
